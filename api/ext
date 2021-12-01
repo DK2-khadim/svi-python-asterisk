@@ -1,0 +1,11 @@
+;begin consultation
+exten => 123,1,Playback(bienvenu)
+exten => 123,2,Background(codeSecret)
+exten => 123,3,Read(code,,3,,,10)
+;l'utilisateur doit taper 3 touches avant les 10 secondes
+exten => 123,4,GotoIf($[${code}!=0]?123,5:123,2)
+exten => 123,5,Set(montant=${CURL(http://localhost:8000/api/consultation/${CALLERID(num)}/${code})})
+exten => 123,6,Playback(${CALLERID(num)})
+;exten => 123,7,GotoIf($[${montant}==0]?1000,2:1000,8)
+exten => 123,7,Hangup()
+;end consultation
